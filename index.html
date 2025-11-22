@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sürpriz! Mutlu Yıllar, Değerli Diş Hekimim! 🥳</title>
+    
+    <style>
+        /* Genel Stil */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f8fb; 
+            color: #333;
+            text-align: center;
+            padding: 0; 
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Sayfanın dikey olarak ortalanmasını sağlar */
+        }
+        
+        /* Gizli İçerik Başlangıç Stili */
+        .hidden {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in; /* Geçiş animasyonu için */
+        }
+        
+        /* Video Alanı Stili */
+        #video-stage {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        /* Video Oynatıcı Stili */
+        #surprise-video {
+            max-width: 700px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+        
+        /* Doğum Günü Sayfası İçeriği Stili */
+        #birthday-page {
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Başlıklar ve Mesajlar */
+        header h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .message p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* --- Diş Animasyonu Stili --- */
+        .animation-area {
+            position: relative;
+            height: 150px;
+            margin-bottom: 30px;
+        }
+
+        .tooth {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            line-height: 80px;
+            color: #fff;
+            background-color: #ffc107; 
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            content: '🦷'; 
+            cursor: pointer; 
+            animation: rotateAndScale 3s infinite alternate;
+        }
+        
+        @keyframes rotateAndScale {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg) scale(1.1);
+            }
+        }
+
+        /* Bakteri Stili */
+        .bacteria {
+            position: absolute;
+            font-size: 30px;
+            color: #dc3545; 
+            content: '🦠';
+            opacity: 0.8;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+        
+        @keyframes pulse {
+             0% { opacity: 0.8; } 100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* --- Fotoğraf Animasyonu Stili --- */
+        .birthday-person-photo {
+            width: 150px; 
+            height: 150px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 5px solid #007bff; 
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.5); 
+            animation: fadeInAndBounce 2s ease-out forwards; 
+            opacity: 0; 
+            transform: translateY(-50px); 
+        }
+
+        @keyframes fadeInAndBounce {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.8);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(10px) scale(1.05); 
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        /* --- Mum Animasyonu Stili --- */
+        .cake {
+            position: relative;
+            width: 100px;
+            height: 50px;
+            background-color: #e91e63;
+            border-radius: 10px;
+            margin: 40px auto 20px;
+        }
+
+        .candle {
+            position: absolute;
+            top: -20px;
+            left: 45px;
+            width: 10px;
+            height: 25px;
+            background-color: #fff;
+            border-radius: 2px;
+        }
+
+        .flame {
+            position: absolute;
+            top: -10px;
+            left: 2px;
+            width: 6px;
+            height: 12px;
+            background: orange;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 5px 2px #ffeb3b, 0 0 10px 4px orange;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        .flame.off {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-1px); opacity: 0.9; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        #blow-out-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        #blow-out-button:hover:not(:disabled) {
+            background-color: #1e7e34;
+        }
+        
+        .confetti {
+            position: fixed;
+            z-index: 1000;
+        }
+
+    </style>
+    </head>
+<body>
+    
+    <div id="video-stage">
+        <h2>Sevgili Diş Hekimimize Özel Bir Mesaj...</h2>
+        
+        <video 
+            id="surprise-video" 
+            width="100%" 
+            height="auto" 
+            autoplay 
+            controls 
+            playsinline
+            style="max-width: 700px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"
+        >
+            <source src="surprise_video.mp4" type="video/mp4">
+            Tarayıcınız video etiketini desteklemiyor.
+        </video>
+        
+    </div>
+    
+    <div id="birthday-page" class="hidden">
+        
+        <img src="disci_fotografi.png" alt="Doğum Günü Sahibi" class="birthday-person-photo">
+        
+        <div class="animation-area">
+            <div id="tooth" class="tooth">🦷</div> 
+            <div id="bacteria-container"></div> 
+        </div>
+
+        <header>
+            <h1>🎉 Mutlu Yıllar Değerli Diş Hekimimiz! 🎉</h1>
+        </header>
+
+        <section class="message">
+            <p>Hayatınızın en parlak gülümsemesiyle dolu bir yaş diliyoruz!</p>
+            <p>Bize sağlıklı ve mutlu gülüşler vermeye devam ettiğiniz için teşekkür ederiz. İyi ki doğdunuz!</p>
+        </section>
+
+        <button id="blow-out-button">Mumları Söndür (Tıkla)</button>
+
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Sevgilerle, sana en sevdiğin arkadaşından😉...</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoStage = document.getElementById('video-stage');
+            const birthdayPage = document.getElementById('birthday-page');
+            const videoElement = document.getElementById('surprise-video');
+            const bacteriaContainer = document.getElementById('bacteria-container');
+            const tooth = document.getElementById('tooth');
+            const blowOutButton = document.getElementById('blow-out-button');
+            const flame = document.querySelector('.flame');
+            const MESSAGE_PARAGRAPH = document.querySelector('.message p');
+
+
+            // --- VİDEO BİTİŞİNİ KONTROL ETME (YEREL DOSYA İÇİN) ---
+
+            // Video bittiğinde (ended) sayfanın gösterilmesi fonksiyonu
+            videoElement.addEventListener('ended', () => {
+                showBirthdayPage();
+            });
+
+            function showBirthdayPage() {
+                // 1. Video alanını gizle
+                videoStage.style.display = 'none';
+                
+                // 2. Doğum günü sayfasını blok olarak göster
+                birthdayPage.style.display = 'block';
+                
+                // 3. Geçiş animasyonu ile görünür yap
+                setTimeout(() => {
+                   birthdayPage.classList.remove('hidden');
+                   birthdayPage.style.opacity = '1';
+                }, 50); 
+            }
+
+
+            // --- DİŞÇİLİK ANİMASYONLARI KODU ---
+            const NUM_BACTERIA = 10;
+            const BACTERIA_SYMBOL = '🦠'; 
+
+            // Bakterileri oluşturma
+            function initializeBacteria() {
+                 for (let i = 0; i < NUM_BACTERIA; i++) {
+                    const bacteria = document.createElement('div');
+                    bacteria.classList.add('bacteria');
+                    bacteria.textContent = BACTERIA_SYMBOL;
+                    
+                    const x = Math.random() * 80 + 10; 
+                    const y = Math.random() * 80 + 10; 
+                    
+                    bacteria.style.left = `${x}%`;
+                    bacteria.style.top = `${y}%`;
+                    
+                    bacteria.style.animation = `pulse ${1 + Math.random()}s infinite alternate`;
+
+                    bacteriaContainer.appendChild(bacteria);
+                }
+            }
+            
+            initializeBacteria(); 
+
+            // Tıklama (Diş Fırçalama) Olayı
+            tooth.addEventListener('click', () => {
+                const allBacteria = document.querySelectorAll('.bacteria');
+                if (allBacteria.length === 0) return; 
+
+                allBacteria.forEach(bacteria => {
+                    bacteria.style.transform = 'scale(0)';
+                    bacteria.style.opacity = '0';
+                    setTimeout(() => bacteria.remove(), 600); 
+                });
+
+                tooth.style.backgroundColor = '#28a745'; 
+                tooth.style.transition = 'background-color 0.5s';
+
+                MESSAGE_PARAGRAPH.innerHTML = 'Mükemmel Fırçalama! Tüm **bakteriler temizlendi**. Şimdi gülümseme zamanı! 😄';
+            });
+
+
+            // --- MUM SÖNDÜRME ANİMASYONU KODU ---
+            blowOutButton.addEventListener('click', () => {
+                if(flame.classList.contains('off')) return; 
+
+                flame.classList.add('off'); 
+                blowOutButton.textContent = 'Umarım tüm dileklerin gerçek olur her şeyin en iyisini hak ediyorsun! 🌟';
+                blowOutButton.disabled = true;
+
+                // Konfeti efekti
+                setTimeout(() => {
+                    const confettiSymbols = ['🎉', '🎈', '🎁', '🎂', '🦷', '⭐', '✨'];
+                    for (let i = 0; i < 50; i++) {
+                        const confetti = document.createElement('div');
+                        confetti.classList.add('confetti');
+                        confetti.textContent = confettiSymbols[Math.floor(Math.random() * confettiSymbols.length)];
+                        
+                        confetti.style.left = `${Math.random() * 100}vw`;
+                        confetti.style.fontSize = `${10 + Math.random() * 20}px`;
+                        confetti.style.transition = 'none'; 
+                        confetti.style.top = `${-20 - Math.random() * 100}px`; 
+
+                        document.body.appendChild(confetti);
+
+                        setTimeout(() => {
+                             confetti.style.transition = `transform ${3 + Math.random() * 2}s linear, opacity 1s`;
+                             confetti.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 720}deg)`;
+                             confetti.style.opacity = '0.7';
+                        }, 50); 
+                        
+                        setTimeout(() => confetti.remove(), 6000);
+                    }
+                }, 500);
+            });
+        });
+    </script>
+    </body>
+</html>

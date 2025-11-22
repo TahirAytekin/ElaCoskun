@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tahin'den Sürpriz! 🎁</title>
+    
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --accent-color: #e74c3c;
+            --bg-color: #f0f8ff;
+            --black-bg: #000000;
+            --gold: #f1c40f;
+            --party-bg: linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%);
+        }
+
+        /* TEMA VE SCROLL AYARLARI */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Scroll tamamen kapalı */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            transition: background 1s ease;
+        }
+
+        body.cinema-mode {
+            background-color: var(--black-bg);
+            color: white;
+        }
+
+        body.celebrating {
+            background: var(--party-bg) !important;
+        }
+
+        /* PARTİ MODUNDA KART EFEKTİ */
+        body.celebrating .card {
+            box-shadow: 0 0 50px rgba(255, 105, 180, 0.6), 0 0 0 10px rgba(255, 215, 0, 0.3);
+            border-color: var(--gold);
+            transform: scale(1.02);
+            transition: all 0.8s ease;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 1s ease;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none !important;
+        }
+
+        /* --- BÖLÜM 1: HEDİYE PAKETİ --- */
+        #intro-stage {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            z-index: 10;
+        }
+
+        .gift-container {
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 4vh;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .gift-box {
+            width: 220px;
+            height: 220px;
+            background-color: var(--accent-color);
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            transition: all 0.8s ease;
+        }
+
+        .gift-lid {
+            width: 240px;
+            height: 50px;
+            background-color: #c0392b;
+            position: absolute;
+            top: -50px;
+            left: -10px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 2;
+        }
+
+        .ribbon-vertical {
+            width: 40px;
+            height: 100%;
+            background-color: var(--gold);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ribbon-horizontal {
+            width: 100%;
+            height: 40px;
+            background-color: var(--gold);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .bow {
+            position: absolute;
+            top: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            z-index: 3;
+            transition: all 0.8s ease;
+        }
+
+        .bow::before, .bow::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 8px solid var(--gold);
+            border-radius: 50%;
+            top: 15px;
+        }
+        .bow::before { left: -25px; transform: rotate(-15deg); }
+        .bow::after { right: -25px; transform: rotate(15deg); }
+
+        #open-gift-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            transition: transform 0.2s;
+            font-weight: bold;
+        }
+
+        .gift-opened .gift-lid { transform: translateY(-150px) rotate(-25deg); opacity: 0; }
+        .gift-opened .bow { transform: translateX(-50%) translateY(-150px) rotate(-25deg); opacity: 0; }
+        .gift-opened .gift-box { transform: scale(1.1); opacity: 0; }
+
+        /* --- BÖLÜM 2 & 3: VİDEOLAR --- */
+        #video-section {
+            background-color: var(--black-bg);
+            z-index: 5;
+        }
+
+        .video-wrapper {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .video-wrapper h2 {
+            color: #fff;
+            font-weight: 300;
+            margin-bottom: 2vh;
+            line-height: 1.3;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        video {
+            width: 100%;
+            max-height: 60vh;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            outline: none;
+        }
+
+        /* --- BÖLÜM 4: FINAL PARTİ --- */
+        #party-section {
+            display: none; 
+            background: transparent;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2vh 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 2px solid #f1f1f1;
+            transition: all 0.5s ease;
+        }
+
+        .photo-frame {
+            height: 25vh;
+            width: 25vh;
+            max-width: 240px;
+            max-height: 240px;
+            margin: 0 auto 1.5vh;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        h1 { color: var(--primary-color); font-size: 1.6rem; margin: 0.5vh 0; }
+        p { color: #666; line-height: 1.4; font-size: 1rem; margin-bottom: 1vh; }
+
+        /* --- PASTA VE MUMLAR --- */
+        .cake-container {
+            margin-top: 2vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 120px;
+            flex-shrink: 0;
+        }
+
+        .cake-body {
+            width: 260px;
+            height: 80px;
+            background-color: #e91e63;
+            border-radius: 15px 15px 5px 5px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .cake-body::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -5px;
+            width: 270px;
+            height: 30px;
+            background-color: #f8bbd0;
+            border-radius: 15px;
+            z-index: 2;
+        }
+
+        .candles-container {
+            position: absolute;
+            top: -40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 10px;
+            z-index: 1;
+        }
+
+        .candle {
+            width: 5px;
+            height: 30px;
+            background: linear-gradient(to bottom, #fff, #3498db);
+            border-radius: 2px;
+            margin: 2px;
+            position: relative;
+        }
+
+        /* YANAN ATEŞ */
+        .flame {
+            width: 7px;
+            height: 10px;
+            background: #ff9800;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 5px #ffc107, 0 0 10px #ff9800;
+            animation: burn 0.1s infinite alternate;
+            opacity: 1; /* Başlangıçta görünür */
+            transition: all 0.5s ease-out; /* Sönme geçişi */
+        }
+
+        /* SÖNEN ATEŞ (DUMAN EFEKTİ) */
+        .flame.out {
+            opacity: 0;
+            transform: scale(0.3) translateY(-30px) skewX(20deg); /* Duman gibi yukarı uçar */
+        }
+
+        #blow-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 2vh;
+            margin-bottom: 1vh;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+            transition: transform 0.2s, background-color 0.2s;
+            flex-shrink: 0;
+        }
+        #blow-btn:hover { transform: scale(1.05); background-color: #2ecc71; }
+        #blow-btn:disabled { background-color: #95a5a6; cursor: default; transform: none; box-shadow: none; }
+
+        .confetti {
+            position: fixed;
+            z-index: 999;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes burn { from { transform: translateX(-50%) scale(1); opacity: 1; } to { transform: translateX(-50%) scale(1.2); opacity: 0.8; } }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+        @media (max-height: 650px) {
+            .photo-frame { height: 20vh; width: 20vh; }
+            .cake-container { transform: scale(0.9); margin-top: 1vh; }
+            h1 { font-size: 1.4rem; }
+            p { font-size: 0.9rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="intro-stage" class="container">
+        <div class="gift-container" id="gift-anim-box">
+            <div class="bow"></div>
+            <div class="gift-lid">
+                <div class="ribbon-vertical"></div>
+            </div>
+            <div class="gift-box">
+                <div class="ribbon-vertical"></div>
+                <div class="ribbon-horizontal"></div>
+            </div>
+        </div>
+        <button id="open-gift-btn">Tahin'den Sana Hediye 🎁</button>
+    </div>
+
+    <div id="video-section" class="container hidden">
+        <div id="v-wrapper-1" class="video-wrapper">
+            <h2>Ne olursa olsun, kendin gibi kal. Çünkü en güzel halin o.</h2>
+            <video id="video-1" playsinline>
+                <source src="ozelgun_video.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div id="v-wrapper-2" class="video-wrapper hidden">
+            <h2>ELA ABLA KENDİNE BİR DOĞUM GÜNÜ MESAJI VERSEN NE DERDİN?</h2>
+            <video id="video-2" playsinline>
+                <source src="surprise_video.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <div id="party-section" class="container">
+        <div class="card">
+            <div class="photo-frame">
+                <img src="disci_fotografi.png" alt="Doğum Günü Çocuğu">
+            </div>
+            
+            <h1>İyi ki Doğdun Diş Hekimimiz!</h1>
+            <p>Gülüşlerimizi güzelleştirdiğin gibi, <br>yeni yaşın da hayatını güzelleştirsin.</p>
+
+            <div class="cake-container">
+                <div class="cake-body">
+                    <div class="candles-container" id="candles-holder"></div>
+                </div>
+            </div>
+            
+            <button id="blow-btn">Dilek Tut ve Üfle! 💨</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const introStage = document.getElementById('intro-stage');
+            const giftBox = document.getElementById('gift-anim-box');
+            const openBtn = document.getElementById('open-gift-btn');
+            
+            const videoSection = document.getElementById('video-section');
+            const wrapper1 = document.getElementById('v-wrapper-1');
+            const wrapper2 = document.getElementById('v-wrapper-2');
+            const video1 = document.getElementById('video-1');
+            const video2 = document.getElementById('video-2');
+            
+            const partySection = document.getElementById('party-section');
+            const blowBtn = document.getElementById('blow-btn');
+            const candlesHolder = document.getElementById('candles-holder');
+
+            // --- HEDİYE AÇMA ---
+            openBtn.addEventListener('click', () => {
+                giftBox.classList.add('gift-opened');
+                openBtn.style.opacity = '0';
+                setTimeout(() => {
+                    introStage.classList.add('hidden');
+                    videoSection.classList.remove('hidden');
+                    document.body.classList.add('cinema-mode'); 
+                    video1.volume = 1.0; 
+                    video1.play().catch(e => console.log("Hata:", e));
+                }, 800);
+            });
+
+            // --- VİDEO GEÇİŞLERİ ---
+            video1.addEventListener('ended', () => {
+                wrapper1.style.display = 'none';
+                wrapper2.classList.remove('hidden');
+                video2.play();
+            });
+
+            video2.addEventListener('ended', () => {
+                videoSection.style.opacity = '0'; 
+                setTimeout(() => {
+                    videoSection.style.display = 'none';
+                    document.body.classList.remove('cinema-mode'); 
+                    partySection.style.display = 'flex'; 
+                    setupCandles(26); 
+                }, 1000);
+            });
+
+            // --- MUMLARI OLUŞTURMA ---
+            function setupCandles(count) {
+                for(let i=0; i<count; i++) {
+                    const candleDiv = document.createElement('div');
+                    candleDiv.classList.add('candle');
+                    const flameDiv = document.createElement('div');
+                    flameDiv.classList.add('flame');
+                    candleDiv.appendChild(flameDiv);
+                    candlesHolder.appendChild(candleDiv);
+                }
+            }
+
+            // --- MUMLARI SÖNDÜRME (BUTONA BASINCA) ---
+            blowBtn.addEventListener('click', () => {
+                // Ateşleri seç
+                const flames = document.querySelectorAll('.flame');
+                
+                // Her bir ateşe 'out' sınıfını ekle (SÖNME İŞLEMİ BURADA)
+                flames.forEach((flame, index) => {
+                    // Hafif rastgele gecikme ile sönsünler (gerçekçi üfleme)
+                    setTimeout(() => {
+                        flame.classList.add('out'); 
+                    }, index * 20 + Math.random() * 150);
+                });
+
+                // Arka planı parti moduna al
+                document.body.classList.add('celebrating');
+                
+                // Butonu pasif yap
+                blowBtn.textContent = "Nice Mutlu Yıllara! 🥳";
+                blowBtn.disabled = true;
+
+                // Konfeti patlat
+                createConfetti(200); 
+            });
+
+            function createConfetti(amount) {
+                const colors = ['#e74c3c', '#3498db', '#f1c40f', '#9b59b6', '#2ecc71', '#e91e63'];
+                for (let i = 0; i < amount; i++) {
+                    const conf = document.createElement('div');
+                    conf.classList.add('confetti');
+                    conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    conf.style.left = Math.random() * 100 + 'vw';
+                    conf.style.top = -10 + 'px';
+                    const size = Math.random() * 10 + 5;
+                    conf.style.width = size + 'px';
+                    conf.style.height = size + 'px';
+                    conf.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                    document.body.appendChild(conf);
+                    setTimeout(() => conf.remove(), 5000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
